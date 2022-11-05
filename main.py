@@ -1,17 +1,4 @@
 #!/env/bash python3
-# Path: main.py
-# a program made in python that scans https://www.4chan.org/gif/ for new threads
-# it uses the 4chan API to get the threads
-# when a thread is found it will get its url and download all webms and gifs in it
-# ('https://i.4cdn.org/gif/*.webm', 'https://i.4cdn.org/gif/*.gif')
-# uses the requests library to download the files
-# uses the json library to parse the json data
-# uses the tdqm library to show a progress bar
-# uses the os library to create folders and check if files exist
-# uses the time library to sleep the program
-# uses the sys library to exit the program
-# uses the threading library to run the program in a thread
-# uses the queue library to store the threads
 
 import requests
 import json
@@ -22,24 +9,24 @@ import sys
 import threading
 import queue
 
-# the url of the 4chan API
+# the url_ of the 4chan API
 url = 'https://a.4cdn.org/gif/threads.json'
 
-# the folder where the files will be downloaded
+# the folder_ where the files will be downloaded
 folder = '4chan/gif/'
 
-# the program will create a folder for each thread
-# the folder will be named after the thread number
+# the program will create a folder_ for each thread
+# the folder_ will be named after the thread number
 
-def download(url, folder):
+def download(url_, folder_):
     # the name of the file
-    file = url.split('/')[-1]
+    file = url_.split('/')[-1]
     # the path of the file
-    path = folder + file
+    path = folder_ + file
     # if the file doesn't exist
     if not os.path.isfile(path):
         # download the file
-        r = requests.get(url, stream=True)
+        r = requests.get(url_, stream=True)
         # the total size of the file
         total_size = int(r.headers.get('content-length', 0))
         # the size of the file that has been downloaded
@@ -79,16 +66,16 @@ def get_threads():
         for thread in page['threads']:
             # the thread number
             number = thread['no']
-            # the thread url
+            # the thread url_
             thread_url = 'https://boards.4chan.org/gif/thread/' + str(number)
-            # the thread folder
+            # the thread folder_
             thread_folder = folder + str(number) + '/'
-            # if the thread folder doesn't exist
+            # if the thread folder_ doesn't exist
             if not os.path.isdir(thread_folder):
-                # create the thread folder
+                # create the thread folder_
                 os.mkdir(thread_folder)
             # the thread
-            thread = {'number': number, 'url': thread_url, 'folder': thread_folder}
+            thread = {'number': number, 'url_': thread_url, 'folder_': thread_folder}
             # add the thread to the threads
             threads.append(thread)
     # return the threads
@@ -97,11 +84,11 @@ def get_threads():
 def get_files(thread):
     # the thread number
     number = thread['number']
-    # the thread url
-    thread_url = thread['url']
-    # the thread folder
-    thread_folder = thread['folder']
-    # the thread url
+    # the thread url_
+    thread_url = thread['url_']
+    # the thread folder_
+    thread_folder = thread['folder_']
+    # the thread url_
     thread_url = 'https://a.4cdn.org/gif/thread/' + str(number) + '.json'
     # get the json data
     r = requests.get(thread_url)
@@ -113,9 +100,9 @@ def get_files(thread):
     for post in data['posts']:
         # if the post has a file
         if 'filename' in post:
-            # the file url
+            # the file url_
             file_url = 'https://i.4cdn.org/gif/' + str(post['tim']) + post['ext']
-            # add the file url to the files
+            # add the file url_ to the files
             files.append(file_url)
     # return the files
     return files
@@ -127,10 +114,10 @@ def submain():
     for thread in threads:
         # the thread number
         number = thread['number']
-        # the thread url
-        thread_url = thread['url']
-        # the thread folder
-        thread_folder = thread['folder']
+        # the thread url_
+        thread_url = thread['url_']
+        # the thread folder_
+        thread_folder = thread['folder_']
         # the files
         files = get_files(thread)
         # for each file
@@ -187,5 +174,4 @@ def main():
 
 if __name__ == '__main__':
     main()
-
 
